@@ -10,6 +10,8 @@
 		AA65737C1E31096C00B441E8 /* Recipe.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA65737B1E31096C00B441E8 /* Recipe.swift */; };
 		AA65737F1E310B7100B441E8 /* RecipeAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA65737E1E310B7100B441E8 /* RecipeAPI.swift */; };
 		AA6573811E3125AF00B441E8 /* RecipeModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA6573801E3125AF00B441E8 /* RecipeModelTests.swift */; };
+		AA6573841E315FAF00B441E8 /* RecipeImageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA6573831E315FAF00B441E8 /* RecipeImageCell.swift */; };
+		AA6573861E31618800B441E8 /* RecipeDetailCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA6573851E31618800B441E8 /* RecipeDetailCell.swift */; };
 		AACF99741E30EF9D00C0EA57 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AACF99731E30EF9D00C0EA57 /* AppDelegate.swift */; };
 		AACF99761E30EF9D00C0EA57 /* MasterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AACF99751E30EF9D00C0EA57 /* MasterViewController.swift */; };
 		AACF99781E30EF9D00C0EA57 /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AACF99771E30EF9D00C0EA57 /* DetailViewController.swift */; };
@@ -33,6 +35,8 @@
 		AA65737B1E31096C00B441E8 /* Recipe.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Recipe.swift; sourceTree = "<group>"; };
 		AA65737E1E310B7100B441E8 /* RecipeAPI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecipeAPI.swift; sourceTree = "<group>"; };
 		AA6573801E3125AF00B441E8 /* RecipeModelTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecipeModelTests.swift; sourceTree = "<group>"; };
+		AA6573831E315FAF00B441E8 /* RecipeImageCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RecipeImageCell.swift; path = View/RecipeImageCell.swift; sourceTree = "<group>"; };
+		AA6573851E31618800B441E8 /* RecipeDetailCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecipeDetailCell.swift; sourceTree = "<group>"; };
 		AACF99701E30EF9D00C0EA57 /* Recipy.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Recipy.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		AACF99731E30EF9D00C0EA57 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		AACF99751E30EF9D00C0EA57 /* MasterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MasterViewController.swift; sourceTree = "<group>"; };
@@ -80,6 +84,15 @@
 			name = API;
 			sourceTree = "<group>";
 		};
+		AA6573821E315F9600B441E8 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				AA6573831E315FAF00B441E8 /* RecipeImageCell.swift */,
+				AA6573851E31618800B441E8 /* RecipeDetailCell.swift */,
+			);
+			name = View;
+			sourceTree = "<group>";
+		};
 		AACF99671E30EF9C00C0EA57 = {
 			isa = PBXGroup;
 			children = (
@@ -101,6 +114,7 @@
 		AACF99721E30EF9D00C0EA57 /* Recipy */ = {
 			isa = PBXGroup;
 			children = (
+				AA6573821E315F9600B441E8 /* View */,
 				AA65737D1E310B4800B441E8 /* API */,
 				AA6573781E31085000B441E8 /* Model */,
 				AACF99951E3103D900C0EA57 /* ViewController */,
@@ -236,10 +250,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				AACF99781E30EF9D00C0EA57 /* DetailViewController.swift in Sources */,
+				AA6573841E315FAF00B441E8 /* RecipeImageCell.swift in Sources */,
 				AACF99761E30EF9D00C0EA57 /* MasterViewController.swift in Sources */,
 				AA65737F1E310B7100B441E8 /* RecipeAPI.swift in Sources */,
 				AACF99741E30EF9D00C0EA57 /* AppDelegate.swift in Sources */,
 				AA65737C1E31096C00B441E8 /* Recipe.swift in Sources */,
+				AA6573861E31618800B441E8 /* RecipeDetailCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

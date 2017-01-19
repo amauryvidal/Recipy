@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import UIKit
 
 enum RequestType {
     case search
@@ -33,8 +34,10 @@ struct RecipeAPI {
         switch type {
         case .search:
             components.path += "search"
+            break
         case .get:
             components.path += "get"
+            break
         }
         
         if let params = params {
@@ -70,26 +73,75 @@ struct RecipeAPI {
         return buildURL(type: .get, params: ["rId": recipeId])
     }
     
+    
+    /// Search recipes matching the query
+    ///
+    /// - Parameters:
+    ///   - query: The query to search the recipes that matches it
+    ///   - completion: A completion handler with a list of recipes matching the query
+    ///     or an empty array of no recipe was found
     func recipe(matching query: String, completion: @escaping ([Recipe]) -> Void) {
         let url = buildSearchRequest(query: query)
-        print(url)
         
         URLSession.shared.dataTask(with: url) { data, response, error in
             var recipes = [Recipe]()
             
-            if let data = data,
-                let jsonResult = try? JSONSerialization.jsonObject(with: data, options: []) as? JSON {
-                    debugPrint(jsonResult)
-                    if let results = jsonResult?["recipes"] as? [JSON] {
-                        for case let result in results {
-                            if let recipe = Recipe(json: result) {
-                                recipes += [recipe]
-                            }
+            do {
+                if let data = data,
+                    let jsonResult = try JSONSerialization.jsonObject(with: data, options: []) as? JSON,
+                    let results = jsonResult["recipes"] as? [JSON] {
+                    for case let result in results {
+                        if let recipe = Recipe(json: result) {
+                            recipes += [recipe]
                         }
                     }
-            }
+                }
+            } catch {}
+            
             completion(recipes)
             
-        }.resume()
+            }.resume()
+    }
+    
+    
+    /// Retreive a recipe from the given id
+    ///
+    /// - Parameters:
+    ///   - id: The recipe id
+    ///   - completion: A completion handler with the recipe matching the given id
+    ///     or nil if not recipe corespond to this id
+    func recipe(id: String, completion: @escaping (Recipe?) -> Void) {
+        let url = buildGetRequest(recipeId: id)
+        
+        URLSession.shared.dataTask(with: url) { data, response, error in
+            
+            var recipe: Recipe?
+            
+            do {
+                if let data = data,
+                    let result = try JSONSerialization.jsonObject(with: data, options: []) as? JSON {
+                    debugPrint(result)
+                    recipe = Recipe(json: result)
+                    completion(recipe)
+                }
+            } catch {
+                completion(nil)
+            }
+            
+            }.resume()
+    }
+    
+    func downloadImage(at url: URL, completion: @escaping (UIImage?) -> Void) -> URLSessionDataTask? {
+        let request = URLRequest(url: url)
+        let downloadingRequest = URLSession.shared.dataTask(with: request) { data, _, _ in
+            var image: UIImage?
+            if let data = data {
+                image = UIImage(data: data)
+            }
+            completion(image)
+            
+        }
+        downloadingRequest.resume()
+        return downloadingRequest
     }
 }
