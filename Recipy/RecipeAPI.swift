@@ -56,13 +56,15 @@ struct RecipeAPI {
             var recipes = [Recipe]()
             
             if let data = data,
-                let json = try? JSONSerialization.jsonObject(with: data, options: []) as? JSON,
-                let results = json?["recipes"] as? JSON {
-                for case let result in results {
-                    if let recipe = Recipe(json: [result.key: result.value]) {
-                        recipes += [recipe]
+                let jsonResult = try? JSONSerialization.jsonObject(with: data, options: []) as? JSON {
+                    print(jsonResult)
+                    if let results = jsonResult?["recipes"] as? [JSON] {
+                        for case let result in results {
+                            if let recipe = Recipe(json: result) {
+                                recipes += [recipe]
+                            }
+                        }
                     }
-                }
             }
             
             completion(recipes)
