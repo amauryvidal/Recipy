@@ -9,20 +9,25 @@
 import Foundation
 
 struct Recipe {
-    let imageUrl: URL?
+    let recipeId: String
     let sourceUrl: URL
     let f2fUrl: URL
     let title: String
     let publisher: String
     let publisherUrl: URL
     let socialRank: Double
-    let ingredients: [String]?
-    let page: Int?
+    let imageUrl: URL?          // Not present on the Search request documentation exemple
+    let ingredients: [String]?  // Only present on the Search requests
+    let page: Int?              // Only on the Get requests
 }
 
+// Recipe JSON Parsing
 extension Recipe {
     init?(json: [String: Any]) {
+        // First we make sure that the non-optional fields are present in the Json
+        // else the initialisation fails
         guard
+            let recipeId = json["recipe_id"] as? String,
             let sourceUrlRaw = json["source_url"] as? String,
             let f2fUrlRaw = json["f2f_url"] as? String,
             let title = json["title"] as? String,
@@ -33,6 +38,9 @@ extension Recipe {
                 return nil
         }
         
+        
+        // We try to create URL from the string retreived
+        // else the initialisation fails
         guard
             let sourceUrl = URL(string: sourceUrlRaw),
             let f2fUrl = URL(string: f2fUrlRaw),
@@ -41,6 +49,8 @@ extension Recipe {
                 return nil
         }
         
+        // We assign the retreived value and the optionals one to the our recipe
+        self.recipeId = recipeId
         let imageUrlRaw = json["image_url"] as? String
         self.imageUrl = imageUrlRaw != nil ? URL(string: imageUrlRaw!) : nil
         self.sourceUrl = sourceUrl

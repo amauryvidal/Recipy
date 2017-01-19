@@ -117,8 +117,8 @@
 			isa = PBXGroup;
 			children = (
 				AACF998A1E30EF9D00C0EA57 /* RecipyApiTests.swift */,
-				AACF998C1E30EF9D00C0EA57 /* Info.plist */,
 				AA6573801E3125AF00B441E8 /* RecipeModelTests.swift */,
+				AACF998C1E30EF9D00C0EA57 /* Info.plist */,
 			);
 			path = RecipyTests;
 			sourceTree = "<group>";

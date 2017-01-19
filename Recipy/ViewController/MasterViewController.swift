@@ -25,6 +25,7 @@ class MasterViewController: UITableViewController {
     override func viewWillAppear(_ animated: Bool) {
         self.clearsSelectionOnViewWillAppear = self.splitViewController!.isCollapsed
         super.viewWillAppear(animated)
+        navigationController?.isNavigationBarHidden = true
     }
 
     // MARK: - Segues
@@ -37,6 +38,7 @@ class MasterViewController: UITableViewController {
                 controller.recipe = recipe
                 controller.navigationItem.leftBarButtonItem = self.splitViewController?.displayModeButtonItem
                 controller.navigationItem.leftItemsSupplementBackButton = true
+                view.endEditing(true)
             }
         }
     }
@@ -53,7 +55,6 @@ class MasterViewController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "RecipeCellIdentifier", for: indexPath)
-
         let recipe = recipes[indexPath.row]
         cell.textLabel?.text = recipe.title
         return cell
@@ -61,13 +62,26 @@ class MasterViewController: UITableViewController {
 }
 
 extension MasterViewController: UISearchBarDelegate {
+    // On return button launch the search
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         if let query = searchBar.text, !query.isEmpty {
+            
+            // Display an indicator that we're fetching from network
+            UIApplication.shared.isNetworkActivityIndicatorVisible = true
+            
+            // Clear previous results
+            recipes.removeAll(keepingCapacity: false)
+            tableView.reloadData()
+            view.endEditing(true)
+            
             RecipeAPI().recipe(matching: query) { recipes in
                 self.recipes = recipes
                 DispatchQueue.main.async {
+                    // Update the tableview from the main thread
                     self.tableView.reloadData()
                 }
+                // Hide the indicator
+                UIApplication.shared.isNetworkActivityIndicatorVisible = false
             }
         }
     }
