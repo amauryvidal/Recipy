@@ -13,13 +13,17 @@ class DetailViewController: UIViewController {
     @IBOutlet weak var recipeImageView: UIImageView!
     @IBOutlet weak var detailTableView: UITableView!
 
-
+    var recipe: Recipe? {
+        didSet {
+            // Update the view.
+            self.configureView()
+        }
+    }
+    
     func configureView() {
         // Update the user interface for the detail item.
-        if let detail = self.detailItem {
-//            if let label = self.detailDescriptionLabel {
-//                label.text = detail.description
-//            }
+        if let recipe = recipe {
+            // update UI
         }
     }
 
@@ -27,18 +31,6 @@ class DetailViewController: UIViewController {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         self.configureView()
-    }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-
-    var detailItem: NSDate? {
-        didSet {
-            // Update the view.
-            self.configureView()
-        }
     }
 }
 
