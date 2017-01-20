@@ -15,37 +15,11 @@ enum Sections: Int {
     case details = 2
 }
 
-class DetailViewController: UITableViewController {
+class RecipeDetailViewController: UITableViewController {
     
     var imageDownloadTask: URLSessionDataTask?
     var image: UIImage?
     var recipe: Recipe?
-//        {
-//        didSet {
-//            // Update the view.
-//            self.configureView()
-//        }
-//    }
-    
-    func configureView() {
-        print("configure view")
-        // Update the user interface for the detail item.
-        if let recipe = recipe {
-            navigationItem.title = recipe.title
-            
-            // update UI
-            imageDownloadTask = RecipeAPI().downloadImage(at: recipe.imageUrl, completion: { (image) in
-                self.imageDownloadTask = nil
-                self.image = image
-                DispatchQueue.main.async {
-                    self.tableView.reloadRows(at: [IndexPath(row: 0, section: Sections.image.rawValue)], with: .automatic)
-                }
-            })
-            
-            // retreive the ingredients
-            fetchRecipeDetails()
-        }
-    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -66,8 +40,62 @@ class DetailViewController: UITableViewController {
         imageDownloadTask?.cancel()
     }
     
+    func configureView() {
+        print("configure view")
+        // Update the user interface for the detail item.
+        if let recipe = recipe {
+            navigationItem.title = recipe.title
+            
+            // update UI
+            imageDownloadTask = RecipeAPI().downloadImage(at: recipe.imageUrl, completion: { (image) in
+                self.imageDownloadTask = nil
+                self.image = image
+                DispatchQueue.main.async {
+                    self.tableView.reloadRows(at: [IndexPath(row: 0, section: Sections.image.rawValue)], with: .automatic)
+                }
+            })
+            
+            // retreive the ingredients
+            fetchRecipeIngredients()
+        }
+    }
     
-    // MARK: - UITableView
+    
+    // MARK: - Network
+    
+    // Fetch additionals detail about the recipe
+    func fetchRecipeIngredients() {
+        if let recipe = recipe {
+            RecipeAPI().recipe(id: recipe.recipeId) { (recipeDetails) in
+                if let recipeDetails = recipeDetails {
+                    self.recipe = recipeDetails
+                    
+                    // Upate the view with the retrieved details
+                    DispatchQueue.main.async {
+                        self.updateIngredients()
+                    }
+                }
+            }
+        }
+    }
+    
+    func updateIngredients() {
+        tableView.reloadSections(IndexSet(integer: Sections.ingredients.rawValue), with: .automatic)
+    }
+    
+    
+    // MARK: - Segue 
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "showWebView" && sender is URL {
+            (segue.destination as? WebViewController)?.url = (sender as? URL)
+        }
+    }
+}
+
+
+// MARK: - UITableView
+extension RecipeDetailViewController {
     
     override func numberOfSections(in tableView: UITableView) -> Int {
         return recipe != nil ? 3 : 0
@@ -130,48 +158,17 @@ class DetailViewController: UITableViewController {
         
         switch section {
         case .image:
-            return 264
+            return UIScreen.main.bounds.height / 2
         case .ingredients:
             return 44
         case .details:
             return 88
         }
     }
-    
-    
-    // MARK: - Network
-    
-    // Fetch additionals detail about the recipe
-    func fetchRecipeDetails() {
-        if let recipe = recipe {
-            RecipeAPI().recipe(id: recipe.recipeId) { (recipeDetails) in
-                if let recipeDetails = recipeDetails {
-                    self.recipe = recipeDetails
-                    
-                    // Upate the view with the retrieved details
-                    DispatchQueue.main.async {
-                        self.updateDetails()
-                    }
-                }
-            }
-        }
-    }
-    
-    func updateDetails() {
-        tableView.reloadSections(IndexSet(integer: Sections.ingredients.rawValue), with: .automatic)
-    }
-    
-    
-    // MARK: - Segue 
-    
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "showWebView" && sender is URL {
-            (segue.destination as? WebViewController)?.url = (sender as? URL)
-        }
-    }
 }
 
-extension DetailViewController: URLActionDelegate {
+// MARK: - URL Action Delegate
+extension RecipeDetailViewController: URLActionDelegate {
     func showUrl(url: URL?) {
         if let url = url {
             performSegue(withIdentifier: "showWebView", sender: url)

@@ -8,9 +8,9 @@
 
 import UIKit
 
-class MasterViewController: UITableViewController {
+class RecipesListViewController: UITableViewController {
 
-    var detailViewController: DetailViewController? = nil
+    var detailViewController: RecipeDetailViewController? = nil
     var recipes = [Recipe]()
 
     override func viewDidLoad() {
@@ -42,17 +42,19 @@ class MasterViewController: UITableViewController {
             }
         }
     }
+}
 
-    // MARK: - Table View
 
+// MARK: - UITableView
+extension RecipeDetailViewController {
     override func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
-
+    
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return recipes.count
     }
-
+    
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "RecipeCellIdentifier", for: indexPath)
         let recipe = recipes[indexPath.row]
@@ -61,7 +63,8 @@ class MasterViewController: UITableViewController {
     }
 }
 
-extension MasterViewController: UISearchBarDelegate {
+// MARK: - Search Bar Delegate
+extension RecipesListViewController: UISearchBarDelegate {
     // On return button launch the search
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         if let query = searchBar.text, !query.isEmpty {
