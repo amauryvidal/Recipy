@@ -18,7 +18,7 @@ class RecipesListViewController: UITableViewController {
         // Do any additional setup after loading the view, typically from a nib.
         if let split = self.splitViewController {
             let controllers = split.viewControllers
-            self.detailViewController = (controllers[controllers.count-1] as! UINavigationController).topViewController as? DetailViewController
+            self.detailViewController = (controllers[controllers.count-1] as! UINavigationController).topViewController as? RecipeDetailViewController
         }
     }
 
@@ -34,7 +34,7 @@ class RecipesListViewController: UITableViewController {
         if segue.identifier == "showDetail" {
             if let indexPath = self.tableView.indexPathForSelectedRow {
                 let recipe = recipes[indexPath.row]
-                let controller = (segue.destination as! UINavigationController).topViewController as! DetailViewController
+                let controller = (segue.destination as! UINavigationController).topViewController as! RecipeDetailViewController
                 controller.recipe = recipe
                 controller.navigationItem.leftBarButtonItem = self.splitViewController?.displayModeButtonItem
                 controller.navigationItem.leftItemsSupplementBackButton = true
@@ -46,7 +46,7 @@ class RecipesListViewController: UITableViewController {
 
 
 // MARK: - UITableView
-extension RecipeDetailViewController {
+extension RecipesListViewController {
     override func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
@@ -77,7 +77,7 @@ extension RecipesListViewController: UISearchBarDelegate {
             tableView.reloadData()
             view.endEditing(true)
             
-            RecipeAPI().recipe(matching: query) { recipes in
+            RecipeAPI.shared.recipe(matching: query) { recipes in
                 self.recipes = recipes
                 DispatchQueue.main.async {
                     // Update the tableview from the main thread

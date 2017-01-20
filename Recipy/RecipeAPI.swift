@@ -16,10 +16,15 @@ enum RequestType {
 
 typealias JSON = [String: Any]
 
-struct RecipeAPI {
+class RecipeAPI {
+    
+    // Can't init because it is singleton
+    private init() {}
+    static let shared: RecipeAPI = RecipeAPI()
+    
     private let apiKey = "0714e27e76464dc4c5135f36e726e364"
     private let urlComponents = URLComponents(string: "http://food2fork.com/api/")! // base URL components of the web service
-    
+    private var imageDownloadTask: URLSessionDataTask?
     
     /// Build the api url with the given parameters
     ///
@@ -131,9 +136,18 @@ struct RecipeAPI {
             }.resume()
     }
     
-    func downloadImage(at url: URL, completion: @escaping (UIImage?) -> Void) -> URLSessionDataTask? {
+    
+    /// Download an image from a url
+    /// Keep a reference to the URLSessionDataTask to be canceled if needed
+    ///
+    /// - Parameters:
+    ///   - url: The image URL
+    ///   - completion: Completion handler returning the image
+    ///     or nil if no image was found or if the data was incorrect
+    func downloadImage(at url: URL, completion: @escaping (UIImage?) -> Void) {
         let request = URLRequest(url: url)
-        let downloadingRequest = URLSession.shared.dataTask(with: request) { data, _, _ in
+        imageDownloadTask = URLSession.shared.dataTask(with: request) { data, _, _ in
+            self.imageDownloadTask = nil
             var image: UIImage?
             if let data = data {
                 image = UIImage(data: data)
@@ -141,7 +155,12 @@ struct RecipeAPI {
             completion(image)
             
         }
-        downloadingRequest.resume()
-        return downloadingRequest
+        imageDownloadTask?.resume()
+    }
+    
+    /// Cancel downloading of image if it exist
+    func cancelImageDownload() {
+        imageDownloadTask?.cancel()
+        imageDownloadTask = nil
     }
 }

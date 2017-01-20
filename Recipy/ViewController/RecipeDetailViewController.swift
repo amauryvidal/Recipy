@@ -16,8 +16,7 @@ enum Sections: Int {
 }
 
 class RecipeDetailViewController: UITableViewController {
-    
-    var imageDownloadTask: URLSessionDataTask?
+
     var image: UIImage?
     var recipe: Recipe?
     
@@ -37,7 +36,7 @@ class RecipeDetailViewController: UITableViewController {
         super.viewWillDisappear(animated)
         
         // If there is an image downloading, we cancel it
-        imageDownloadTask?.cancel()
+        RecipeAPI.shared.cancelImageDownload()
     }
     
     func configureView() {
@@ -47,8 +46,7 @@ class RecipeDetailViewController: UITableViewController {
             navigationItem.title = recipe.title
             
             // update UI
-            imageDownloadTask = RecipeAPI().downloadImage(at: recipe.imageUrl, completion: { (image) in
-                self.imageDownloadTask = nil
+            RecipeAPI.shared.downloadImage(at: recipe.imageUrl, completion: { (image) in
                 self.image = image
                 DispatchQueue.main.async {
                     self.tableView.reloadRows(at: [IndexPath(row: 0, section: Sections.image.rawValue)], with: .automatic)
@@ -66,7 +64,7 @@ class RecipeDetailViewController: UITableViewController {
     // Fetch additionals detail about the recipe
     func fetchRecipeIngredients() {
         if let recipe = recipe {
-            RecipeAPI().recipe(id: recipe.recipeId) { (recipeDetails) in
+            RecipeAPI.shared.recipe(id: recipe.recipeId) { (recipeDetails) in
                 if let recipeDetails = recipeDetails {
                     self.recipe = recipeDetails
                     

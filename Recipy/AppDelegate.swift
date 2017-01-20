@@ -9,10 +9,9 @@
 import UIKit
 
 @UIApplicationMain
-class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDelegate {
+class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
-
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
@@ -45,11 +44,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     }
 
-    // MARK: - Split view
+}
 
+
+// MARK: - Split view
+extension AppDelegate: UISplitViewControllerDelegate {
     func splitViewController(_ splitViewController: UISplitViewController, collapseSecondary secondaryViewController:UIViewController, onto primaryViewController:UIViewController) -> Bool {
         guard let secondaryAsNavController = secondaryViewController as? UINavigationController else { return false }
-        guard let topAsDetailController = secondaryAsNavController.topViewController as? DetailViewController else { return false }
+        guard let topAsDetailController = secondaryAsNavController.topViewController as? RecipeDetailViewController else { return false }
         if topAsDetailController.recipe == nil {
             // Return true to indicate that we have handled the collapse by doing nothing; the secondary controller will be discarded.
             return true
