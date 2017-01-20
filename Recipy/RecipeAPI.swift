@@ -119,8 +119,8 @@ struct RecipeAPI {
             
             do {
                 if let data = data,
-                    let result = try JSONSerialization.jsonObject(with: data, options: []) as? JSON {
-                    debugPrint(result)
+                    let jsonResult = try JSONSerialization.jsonObject(with: data, options: []) as? JSON,
+                    let result = jsonResult["recipe"] as? JSON {
                     recipe = Recipe(json: result)
                     completion(recipe)
                 }

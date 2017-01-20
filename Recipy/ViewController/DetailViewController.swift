@@ -8,6 +8,7 @@
 
 import UIKit
 
+// Tableview Sections
 enum Sections: Int {
     case image = 0
     case ingredients = 1
@@ -18,14 +19,16 @@ class DetailViewController: UITableViewController {
     
     var imageDownloadTask: URLSessionDataTask?
     var image: UIImage?
-    var recipe: Recipe? {
-        didSet {
-            // Update the view.
-            self.configureView()
-        }
-    }
+    var recipe: Recipe?
+//        {
+//        didSet {
+//            // Update the view.
+//            self.configureView()
+//        }
+//    }
     
     func configureView() {
+        print("configure view")
         // Update the user interface for the detail item.
         if let recipe = recipe {
             navigationItem.title = recipe.title
@@ -99,7 +102,7 @@ class DetailViewController: UITableViewController {
         case .details:
             let cell = tableView.dequeueReusableCell(withIdentifier: RecipeDetailCell.identifier, for: indexPath) as! RecipeDetailCell
             if let recipe = recipe {
-                cell.configure(recipe: recipe)
+                cell.configure(recipe: recipe, delegate: self)
             }
             return cell
         }
@@ -127,7 +130,7 @@ class DetailViewController: UITableViewController {
         
         switch section {
         case .image:
-            return 230
+            return 264
         case .ingredients:
             return 44
         case .details:
@@ -155,6 +158,23 @@ class DetailViewController: UITableViewController {
     }
     
     func updateDetails() {
-        
+        tableView.reloadSections(IndexSet(integer: Sections.ingredients.rawValue), with: .automatic)
+    }
+    
+    
+    // MARK: - Segue 
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "showWebView" && sender is URL {
+            (segue.destination as? WebViewController)?.url = (sender as? URL)
+        }
+    }
+}
+
+extension DetailViewController: URLActionDelegate {
+    func showUrl(url: URL?) {
+        if let url = url {
+            performSegue(withIdentifier: "showWebView", sender: url)
+        }
     }
 }

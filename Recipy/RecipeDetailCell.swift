@@ -9,6 +9,10 @@
 import Foundation
 import UIKit
 
+protocol URLActionDelegate: UIWebViewDelegate {
+    func showUrl(url: URL?)
+}
+
 class RecipeDetailCell: UITableViewCell {
     static let identifier = "RecipeDetailCellIdentifier"
     
@@ -17,8 +21,23 @@ class RecipeDetailCell: UITableViewCell {
     @IBOutlet weak var publisherLabel: UILabel!
     @IBOutlet weak var rankLabel: UILabel!
     
-    func configure(recipe: Recipe) {
+    private weak var delegate: URLActionDelegate?
+    var instructionURL: URL?
+    var originalURL: URL?
+    
+    func configure(recipe: Recipe, delegate: URLActionDelegate) {
+        self.delegate = delegate
         publisherLabel.text = recipe.publisher
         rankLabel.text = "Social rank: \(round(recipe.socialRank))"
+        instructionURL = recipe.f2fUrl
+        originalURL = recipe.sourceUrl
+    }
+    
+    @IBAction func viewInstruction(_ sender: UIButton) {
+        delegate?.showUrl(url: instructionURL)
+    }
+    
+    @IBAction func viewOriginal(_ sender: UIButton) {
+        delegate?.showUrl(url: originalURL)
     }
 }

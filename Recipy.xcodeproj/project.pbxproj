@@ -12,6 +12,7 @@
 		AA6573811E3125AF00B441E8 /* RecipeModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA6573801E3125AF00B441E8 /* RecipeModelTests.swift */; };
 		AA6573841E315FAF00B441E8 /* RecipeImageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA6573831E315FAF00B441E8 /* RecipeImageCell.swift */; };
 		AA6573861E31618800B441E8 /* RecipeDetailCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA6573851E31618800B441E8 /* RecipeDetailCell.swift */; };
+		AACA344C1E321CD9005689D5 /* WebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AACA344B1E321CD9005689D5 /* WebViewController.swift */; };
 		AACF99741E30EF9D00C0EA57 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AACF99731E30EF9D00C0EA57 /* AppDelegate.swift */; };
 		AACF99761E30EF9D00C0EA57 /* MasterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AACF99751E30EF9D00C0EA57 /* MasterViewController.swift */; };
 		AACF99781E30EF9D00C0EA57 /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AACF99771E30EF9D00C0EA57 /* DetailViewController.swift */; };
@@ -37,6 +38,7 @@
 		AA6573801E3125AF00B441E8 /* RecipeModelTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecipeModelTests.swift; sourceTree = "<group>"; };
 		AA6573831E315FAF00B441E8 /* RecipeImageCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RecipeImageCell.swift; path = View/RecipeImageCell.swift; sourceTree = "<group>"; };
 		AA6573851E31618800B441E8 /* RecipeDetailCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecipeDetailCell.swift; sourceTree = "<group>"; };
+		AACA344B1E321CD9005689D5 /* WebViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebViewController.swift; sourceTree = "<group>"; };
 		AACF99701E30EF9D00C0EA57 /* Recipy.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Recipy.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		AACF99731E30EF9D00C0EA57 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		AACF99751E30EF9D00C0EA57 /* MasterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MasterViewController.swift; sourceTree = "<group>"; };
@@ -142,6 +144,7 @@
 			children = (
 				AACF99751E30EF9D00C0EA57 /* MasterViewController.swift */,
 				AACF99771E30EF9D00C0EA57 /* DetailViewController.swift */,
+				AACA344B1E321CD9005689D5 /* WebViewController.swift */,
 			);
 			path = ViewController;
 			sourceTree = "<group>";
@@ -196,6 +199,7 @@
 				TargetAttributes = {
 					AACF996F1E30EF9D00C0EA57 = {
 						CreatedOnToolsVersion = 8.2.1;
+						DevelopmentTeam = XX5G4637HV;
 						ProvisioningStyle = Automatic;
 					};
 					AACF99851E30EF9D00C0EA57 = {
@@ -256,6 +260,7 @@
 				AACF99741E30EF9D00C0EA57 /* AppDelegate.swift in Sources */,
 				AA65737C1E31096C00B441E8 /* Recipe.swift in Sources */,
 				AA6573861E31618800B441E8 /* RecipeDetailCell.swift in Sources */,
+				AACA344C1E321CD9005689D5 /* WebViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -395,6 +400,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = XX5G4637HV;
 				INFOPLIST_FILE = Recipy/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.amauryvidal.Recipy;
@@ -407,6 +413,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = XX5G4637HV;
 				INFOPLIST_FILE = Recipy/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.amauryvidal.Recipy;
