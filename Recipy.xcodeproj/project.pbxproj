@@ -120,10 +120,10 @@
 		AACF99721E30EF9D00C0EA57 /* Recipy */ = {
 			isa = PBXGroup;
 			children = (
-				AA6573821E315F9600B441E8 /* View */,
 				AA65737D1E310B4800B441E8 /* API */,
 				AA6573781E31085000B441E8 /* Model */,
 				AACF99951E3103D900C0EA57 /* ViewController */,
+				AA6573821E315F9600B441E8 /* View */,
 				AACF99731E30EF9D00C0EA57 /* AppDelegate.swift */,
 				AACF99791E30EF9D00C0EA57 /* Main.storyboard */,
 				AACF997C1E30EF9D00C0EA57 /* Assets.xcassets */,
@@ -138,9 +138,9 @@
 			children = (
 				AACF998A1E30EF9D00C0EA57 /* RecipyApiTests.swift */,
 				AA6573801E3125AF00B441E8 /* RecipeModelTests.swift */,
-				AACF998C1E30EF9D00C0EA57 /* Info.plist */,
 				AA8018821E361B8700951771 /* RecipeImageCellTests.swift */,
 				AA8018841E36214500951771 /* RecipeDetailsCellTests.swift */,
+				AACF998C1E30EF9D00C0EA57 /* Info.plist */,
 			);
 			path = RecipyTests;
 			sourceTree = "<group>";

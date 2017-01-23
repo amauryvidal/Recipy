@@ -93,7 +93,6 @@ class RecipeAPI {
     ///     or an empty array of no recipe was found
     func recipe(matching query: String, page: Int = 1, completion: @escaping ([Recipe]) -> Void) {
         let url = buildSearchRequest(query: query, page: page)
-        print("fetching recipes \(url)")
         session.dataTask(with: url) { data, response, error in
             var recipes = [Recipe]()
             

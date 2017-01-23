@@ -16,30 +16,30 @@ enum Sections: Int {
 }
 
 class RecipeDetailViewController: UITableViewController {
-    var image: UIImage?
     var recipe: Recipe?
+    var image: UIImage?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // Do any additional setup after loading the view, typically from a nib.
         self.configureView()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        
         navigationController?.isNavigationBarHidden = false
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         
-        // If there is an image downloading, we cancel it
+        // If there is still an image downloading, cancel it
         RecipeAPI.shared.cancelImageDownload()
     }
     
+    /// Update the user interface for the detail item.
     func configureView() {
-        // Update the user interface for the detail item.
         if let recipe = recipe {
             navigationItem.title = recipe.title
             

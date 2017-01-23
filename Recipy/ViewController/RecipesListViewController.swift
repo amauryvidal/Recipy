@@ -14,10 +14,9 @@ class RecipesListViewController: UIViewController {
     @IBOutlet weak var tableView: UITableView!
     
     var detailViewController: RecipeDetailViewController? = nil
-    var loadingSpinner: UIActivityIndicatorView?
     var recipes = [Recipe]()
     var currentSearchPage = 1
-    
+    var loadingSpinner: UIActivityIndicatorView? // Spinner to show when we are loading more rows
     var loadingMore: Bool = false {
         didSet {
             if loadingMore == true {
@@ -30,7 +29,7 @@ class RecipesListViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
+        
         if let split = self.splitViewController {
             let controllers = split.viewControllers
             self.detailViewController = (controllers[controllers.count-1] as! UINavigationController).topViewController as? RecipeDetailViewController
@@ -41,8 +40,13 @@ class RecipesListViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        
         navigationController?.isNavigationBarHidden = true
+        if let selectedRow = tableView?.indexPathForSelectedRow {
+            tableView.deselectRow(at: selectedRow, animated: true)
+        }
     }
+    
     
     // MARK: - Segues
     
@@ -131,7 +135,6 @@ extension RecipesListViewController {
         let offsetY = scrollView.contentOffset.y
         let contentHeight = scrollView.contentSize.height
         
-        print("\(offsetY) > \(contentHeight - scrollView.frame.size.height)")
         if offsetY > contentHeight - scrollView.frame.size.height,
             loadingMore == false,
             recipes.count > 0,
