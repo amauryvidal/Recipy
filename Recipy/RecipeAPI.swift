@@ -16,8 +16,13 @@ enum RequestType {
 
 typealias JSON = [String: Any]
 
+protocol RecipeURLSession {
+    func dataTask(with url: URL, completionHandler: @escaping (Data?, URLResponse?, Error?) -> Void) -> URLSessionDataTask
+}
+extension URLSession: RecipeURLSession {}
+
 class RecipeAPI {
-    
+
     // Can't init because it is singleton
     private init() {}
     static let shared: RecipeAPI = RecipeAPI()
@@ -25,6 +30,9 @@ class RecipeAPI {
     private let apiKey = "0714e27e76464dc4c5135f36e726e364"
     private let urlComponents = URLComponents(string: "http://food2fork.com/api/")! // base URL components of the web service
     private var imageDownloadTask: URLSessionDataTask?
+    
+    lazy var session: RecipeURLSession = URLSession.shared
+    
     
     /// Build the api url with the given parameters
     ///
@@ -86,7 +94,7 @@ class RecipeAPI {
     func recipe(matching query: String, page: Int = 1, completion: @escaping ([Recipe]) -> Void) {
         let url = buildSearchRequest(query: query, page: page)
         print("fetching recipes \(url)")
-        URLSession.shared.dataTask(with: url) { data, response, error in
+        session.dataTask(with: url) { data, response, error in
             var recipes = [Recipe]()
             
             do {
@@ -116,7 +124,7 @@ class RecipeAPI {
     func recipe(id: String, completion: @escaping (Recipe?) -> Void) {
         let url = buildGetRequest(recipeId: id)
         
-        URLSession.shared.dataTask(with: url) { data, response, error in
+        session.dataTask(with: url) { data, response, error in
             
             var recipe: Recipe?
             
@@ -143,8 +151,7 @@ class RecipeAPI {
     ///   - completion: Completion handler returning the image
     ///     or nil if no image was found or if the data was incorrect
     func downloadImage(at url: URL, completion: @escaping (UIImage?) -> Void) {
-        let request = URLRequest(url: url)
-        imageDownloadTask = URLSession.shared.dataTask(with: request) { data, _, _ in
+        imageDownloadTask = session.dataTask(with: url) { data, _, _ in
             self.imageDownloadTask = nil
             var image: UIImage?
             if let data = data {
@@ -162,3 +169,4 @@ class RecipeAPI {
         imageDownloadTask = nil
     }
 }
+

@@ -39,7 +39,6 @@ class RecipeDetailViewController: UITableViewController {
     }
     
     func configureView() {
-        print("configure view")
         // Update the user interface for the detail item.
         if let recipe = recipe {
             navigationItem.title = recipe.title

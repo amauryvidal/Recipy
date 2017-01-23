@@ -22,8 +22,8 @@ class RecipeDetailCell: UITableViewCell {
     @IBOutlet weak var rankLabel: UILabel!
     
     private weak var delegate: URLActionDelegate?
-    var instructionURL: URL?
-    var originalURL: URL?
+    private var instructionURL: URL?
+    private var originalURL: URL?
     
     func configure(recipe: Recipe, delegate: URLActionDelegate) {
         self.delegate = delegate
