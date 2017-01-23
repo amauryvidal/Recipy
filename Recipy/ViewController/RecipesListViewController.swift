@@ -8,9 +8,10 @@
 
 import UIKit
 
-class RecipesListViewController: UITableViewController {
+class RecipesListViewController: UIViewController {
     
     @IBOutlet weak var searchBar: UISearchBar!
+    @IBOutlet weak var tableView: UITableView!
     
     var detailViewController: RecipeDetailViewController? = nil
     var loadingSpinner: UIActivityIndicatorView?
@@ -39,7 +40,6 @@ class RecipesListViewController: UITableViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        self.clearsSelectionOnViewWillAppear = self.splitViewController!.isCollapsed
         super.viewWillAppear(animated)
         navigationController?.isNavigationBarHidden = true
     }
@@ -95,16 +95,16 @@ class RecipesListViewController: UITableViewController {
 
 
 // MARK: - UITableView
-extension RecipesListViewController {
-    override func numberOfSections(in tableView: UITableView) -> Int {
+extension RecipesListViewController: UITableViewDataSource, UITableViewDelegate {
+    func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
     
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return recipes.count
     }
     
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "RecipeCellIdentifier", for: indexPath)
         let recipe = recipes[indexPath.row]
         cell.textLabel?.text = recipe.title
@@ -126,7 +126,7 @@ extension RecipesListViewController {
         }
     }
     
-    override func scrollViewDidScroll(_ scrollView: UIScrollView) {
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
         // calculates where the user is in the y-axis
         let offsetY = scrollView.contentOffset.y
         let contentHeight = scrollView.contentSize.height
