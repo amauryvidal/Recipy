@@ -211,7 +211,7 @@
         <scene sceneID="rAB-2I-cvk">
             <objects>
                 <tableViewController id="v6e-t3-fo2" customClass="RecipesListViewController" customModule="Recipy" customModuleProvider="target" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" keyboardDismissMode="onDrag" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="iEB-xr-eIK">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" keyboardDismissMode="onDrag" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="44" id="iEB-xr-eIK">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -255,6 +255,9 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" id="Fwy-2r-f9u"/>
+                    <connections>
+                        <outlet property="searchBar" destination="nOA-ju-7aF" id="jYr-j5-fht"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="hm5-oK-5ZP" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

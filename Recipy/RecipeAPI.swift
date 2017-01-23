@@ -61,12 +61,10 @@ class RecipeAPI {
     ///   - query: The terms to search
     ///   - page: Page to load if there is more than 30 results
     /// - Returns: The GET url
-    private func buildSearchRequest(query: String?, page: Int? = nil) -> URL {
+    private func buildSearchRequest(query: String?, page: Int) -> URL {
         var params = ["q": query]
-        if let page = page, page > 0 {
-            params["page"] = String(page)
-        }
-        return buildURL(type: .search, params: ["q": query])
+        if page > 0 { params["page"] = String(page) }
+        return buildURL(type: .search, params: params)
     }
     
     /// Build a get recipe api request
@@ -85,9 +83,9 @@ class RecipeAPI {
     ///   - query: The query to search the recipes that matches it
     ///   - completion: A completion handler with a list of recipes matching the query
     ///     or an empty array of no recipe was found
-    func recipe(matching query: String, completion: @escaping ([Recipe]) -> Void) {
-        let url = buildSearchRequest(query: query)
-        
+    func recipe(matching query: String, page: Int = 1, completion: @escaping ([Recipe]) -> Void) {
+        let url = buildSearchRequest(query: query, page: page)
+        print("fetching recipes \(url)")
         URLSession.shared.dataTask(with: url) { data, response, error in
             var recipes = [Recipe]()
             

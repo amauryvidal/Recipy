@@ -16,7 +16,6 @@ enum Sections: Int {
 }
 
 class RecipeDetailViewController: UITableViewController {
-
     var image: UIImage?
     var recipe: Recipe?
     
@@ -82,7 +81,7 @@ class RecipeDetailViewController: UITableViewController {
     }
     
     
-    // MARK: - Segue 
+    // MARK: - Segue
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "showWebView" && sender is URL {
