@@ -69,7 +69,7 @@
                                 <rect key="frame" x="0.0" y="28" width="375" height="264"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="HJ0-2k-sdT" id="OL6-vR-Zew">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="264"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="263"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="TWs-gV-bzY">
@@ -87,7 +87,7 @@
                                     <outlet property="recipeImageView" destination="TWs-gV-bzY" id="ksB-wz-cRy"/>
                                 </connections>
                             </tableViewCell>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="IngredientCellIdentifier" textLabel="mhx-Js-2UZ" style="IBUITableViewCellStyleDefault" id="ktm-Z7-wK6">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="RecipeIngredientCellIdentifier" textLabel="mhx-Js-2UZ" style="IBUITableViewCellStyleDefault" id="ktm-Z7-wK6" customClass="RecipeIngredientCell" customModule="Recipy" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="292" width="375" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="ktm-Z7-wK6" id="2tw-v6-sPM">
@@ -108,7 +108,7 @@
                                 <rect key="frame" x="0.0" y="336" width="375" height="88"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="g9x-1u-Cqj" id="ZQf-9a-UgJ">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="88"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="87"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7Wr-3q-5wx">
@@ -163,49 +163,10 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" id="ccX-2w-4lu"/>
-                    <connections>
-                        <segue destination="LW7-he-uof" kind="show" identifier="showWebView" id="0Pl-5l-935"/>
-                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Ryj-L5-NlZ" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="773.60000000000002" y="215.44227886056973"/>
-        </scene>
-        <!--Web View Controller-->
-        <scene sceneID="YbX-9J-jDj">
-            <objects>
-                <viewController id="LW7-he-uof" customClass="WebViewController" customModule="Recipy" customModuleProvider="target" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="nsh-MX-8k4"/>
-                        <viewControllerLayoutGuide type="bottom" id="Dkg-X7-fbq"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="S4R-VR-67p">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <webView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="YgW-8R-q9y">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                                <color key="backgroundColor" red="0.36078431370000003" green="0.38823529410000002" blue="0.4039215686" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <connections>
-                                    <outlet property="delegate" destination="LW7-he-uof" id="9CW-KH-VJA"/>
-                                </connections>
-                            </webView>
-                        </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <constraints>
-                            <constraint firstAttribute="trailing" secondItem="YgW-8R-q9y" secondAttribute="trailing" id="B8m-Cw-KcC"/>
-                            <constraint firstItem="YgW-8R-q9y" firstAttribute="top" secondItem="S4R-VR-67p" secondAttribute="top" id="CGx-RP-Zyy"/>
-                            <constraint firstItem="Dkg-X7-fbq" firstAttribute="top" secondItem="YgW-8R-q9y" secondAttribute="bottom" id="KvY-9a-CsC"/>
-                            <constraint firstItem="YgW-8R-q9y" firstAttribute="leading" secondItem="S4R-VR-67p" secondAttribute="leading" id="jgQ-lp-HQl"/>
-                        </constraints>
-                    </view>
-                    <connections>
-                        <outlet property="webView" destination="YgW-8R-q9y" id="TUK-zF-Rh7"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="gdu-F0-nYj" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="1720.8" y="215.44227886056973"/>
         </scene>
         <!--Recipes List View Controller-->
         <scene sceneID="e5A-5n-abG">
@@ -230,7 +191,7 @@
                                 <rect key="frame" x="0.0" y="64" width="375" height="603"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleAspectFit" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="RecipeCellIdentifier" textLabel="87A-8S-yLg" imageView="h3o-iv-57e" style="IBUITableViewCellStyleDefault" id="k7N-5t-CbM">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleAspectFit" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="RecipeCellIdentifier" textLabel="87A-8S-yLg" imageView="h3o-iv-57e" style="IBUITableViewCellStyleDefault" id="k7N-5t-CbM" customClass="RecipeCell" customModule="Recipy" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="28" width="375" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="k7N-5t-CbM" id="ETk-IH-gu4">

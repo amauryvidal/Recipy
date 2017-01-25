@@ -10,16 +10,18 @@ import UIKit
 
 class RecipesListViewController: UIViewController {
     
+    private let showDetailSegue = "showDetail"
+    
     @IBOutlet weak var searchBar: UISearchBar!
     @IBOutlet weak var tableView: UITableView!
     
+    var viewModel = RecipesListViewModel()
+    
     var detailViewController: RecipeDetailViewController? = nil
-    var recipes = [Recipe]()
-    var currentSearchPage = 1
     var loadingSpinner: UIActivityIndicatorView? // Spinner to show when we are loading more rows
     var loadingMore: Bool = false {
         didSet {
-            if loadingMore == true {
+            if loadingMore {
                 loadingSpinner?.startAnimating()
             } else {
                 loadingSpinner?.stopAnimating()
@@ -51,11 +53,11 @@ class RecipesListViewController: UIViewController {
     // MARK: - Segues
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "showDetail" {
-            if let indexPath = self.tableView.indexPathForSelectedRow {
-                let recipe = recipes[indexPath.row]
+        if segue.identifier == showDetailSegue {
+            if let indexPath = self.tableView.indexPathForSelectedRow,
+                let recipe = viewModel.recipe(at: indexPath.row) {
                 let controller = (segue.destination as! UINavigationController).topViewController as! RecipeDetailViewController
-                controller.recipe = recipe
+                controller.viewModel = RecipeDetailViewModel(recipe: recipe)
                 controller.navigationItem.leftBarButtonItem = self.splitViewController?.displayModeButtonItem
                 controller.navigationItem.leftItemsSupplementBackButton = true
                 view.endEditing(true)
@@ -70,21 +72,22 @@ class RecipesListViewController: UIViewController {
         // Display an indicator that we're fetching from network
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
         
-        RecipeAPI.shared.recipe(matching: query, page: currentSearchPage) { recipes in
+        viewModel.recipes(matching: query) { recipes in
             DispatchQueue.main.async {
                 // Update the tableview from the main thread
                 self.insertRecipes(recipes: recipes)
+                
+                // Hide the indicator
+                UIApplication.shared.isNetworkActivityIndicatorVisible = false
+                self.loadingMore = false
             }
-            // Hide the indicator
-            UIApplication.shared.isNetworkActivityIndicatorVisible = false
-            self.loadingMore = false
         }
     }
     
     func insertRecipes(recipes: [Recipe]) {
         if recipes.count > 0 {
             self.tableView.beginUpdates()
-            self.recipes += recipes
+            viewModel.add(recipes: recipes)
             var indexPathsToInsert = [IndexPath]()
             let start = self.tableView.numberOfRows(inSection: 0)
             let end = start + recipes.count - 1
@@ -105,13 +108,12 @@ extension RecipesListViewController: UITableViewDataSource, UITableViewDelegate 
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return recipes.count
+        return viewModel.nbRecipes
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "RecipeCellIdentifier", for: indexPath)
-        let recipe = recipes[indexPath.row]
-        cell.textLabel?.text = recipe.title
+        let cell = tableView.dequeueReusableCell(withIdentifier: RecipeCell.identifier, for: indexPath) as! RecipeCell
+        cell.textLabel?.text = viewModel.title(at: indexPath.row)
         return cell
     }
 }
@@ -137,12 +139,11 @@ extension RecipesListViewController {
         
         if offsetY > contentHeight - scrollView.frame.size.height,
             loadingMore == false,
-            recipes.count > 0,
-            recipes.count % 30 == 0,
+            viewModel.noMoreResults,
             let query = searchBar.text {
             
             loadingMore = true
-            currentSearchPage += 1
+            viewModel.incrementPage()
             fetchRecipes(query: query)
         }
     }
@@ -155,10 +156,9 @@ extension RecipesListViewController: UISearchBarDelegate {
         if let query = searchBar.text, !query.isEmpty {
             
             // Clear previous results
-            recipes.removeAll(keepingCapacity: false)
+            viewModel.reset()
             tableView.reloadData()
             view.endEditing(true)
-            currentSearchPage = 1
             
             fetchRecipes(query: query)
         }

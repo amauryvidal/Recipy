@@ -7,16 +7,34 @@
 //
 
 import UIKit
+import SafariServices
 
 // Tableview Sections
 enum Sections: Int {
     case image = 0
     case ingredients = 1
     case details = 2
+    
+    var title: String? {
+        switch self {
+        case .image: return nil
+        case .ingredients: return "INGREDIENTS"
+        case.details: return "INFO"
+        }
+    }
+    
+    var height: CGFloat {
+        switch self {
+        case .image: return UIScreen.main.bounds.height / 2
+        case .ingredients: return 44
+        case.details: return 88
+        }
+    }
 }
 
 class RecipeDetailViewController: UITableViewController {
-    var recipe: Recipe?
+    
+    var viewModel: RecipeDetailViewModel?
     var image: UIImage?
     
     override func viewDidLoad() {
@@ -27,33 +45,29 @@ class RecipeDetailViewController: UITableViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
         navigationController?.isNavigationBarHidden = false
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        
         // If there is still an image downloading, cancel it
-        RecipeAPI.shared.cancelImageDownload()
+        viewModel?.cancelImageDownload()
     }
     
     /// Update the user interface for the detail item.
     func configureView() {
-        if let recipe = recipe {
-            navigationItem.title = recipe.title
-            
-            // update UI
-            RecipeAPI.shared.downloadImage(at: recipe.imageUrl, completion: { (image) in
-                self.image = image
-                DispatchQueue.main.async {
-                    self.tableView.reloadRows(at: [IndexPath(row: 0, section: Sections.image.rawValue)], with: .automatic)
-                }
-            })
-            
-            // retreive the ingredients
-            fetchRecipeIngredients()
+        if let viewModel = viewModel {
+        navigationItem.title = viewModel.title
+        viewModel.image { (image) in
+            self.image = image
+            DispatchQueue.main.async {
+                self.tableView.reloadRows(at: [IndexPath(row: 0, section: Sections.image.rawValue)], with: .automatic)
+            }
         }
+        
+        // retreive the ingredients
+        fetchRecipeIngredients()
+    }
     }
     
     
@@ -61,31 +75,16 @@ class RecipeDetailViewController: UITableViewController {
     
     // Fetch additionals detail about the recipe
     func fetchRecipeIngredients() {
-        if let recipe = recipe {
-            RecipeAPI.shared.recipe(id: recipe.recipeId) { (recipeDetails) in
-                if let recipeDetails = recipeDetails {
-                    self.recipe = recipeDetails
-                    
-                    // Upate the view with the retrieved details
-                    DispatchQueue.main.async {
-                        self.updateIngredients()
-                    }
-                }
+        viewModel?.details { (recipeDetails) in
+            // Upate the view with the retrieved details
+            DispatchQueue.main.async {
+                self.updateIngredients()
             }
         }
     }
     
     func updateIngredients() {
         tableView.reloadSections(IndexSet(integer: Sections.ingredients.rawValue), with: .automatic)
-    }
-    
-    
-    // MARK: - Segue
-    
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "showWebView" && sender is URL {
-            (segue.destination as? WebViewController)?.url = (sender as? URL)
-        }
     }
 }
 
@@ -94,25 +93,16 @@ class RecipeDetailViewController: UITableViewController {
 extension RecipeDetailViewController {
     
     override func numberOfSections(in tableView: UITableView) -> Int {
-        return recipe != nil ? 3 : 0
+        return 3
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        guard let section = Sections(rawValue: section) else { return 0 }
-        switch section {
-        case .image:
-            return 1
-        case .ingredients:
-            return recipe?.ingredients?.count ?? 0
-        case .details:
-            return 1
-        }
+        guard let section = Sections(rawValue: section), let viewModel = viewModel else { return 0 }
+        return section == .ingredients ? viewModel.nbIngredients : 1
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let section = Sections(rawValue: indexPath.section) else {
-            return UITableViewCell()
-        }
+        guard let section = Sections(rawValue: indexPath.section) else { return UITableViewCell() }
         
         switch section {
         case .image:
@@ -120,46 +110,26 @@ extension RecipeDetailViewController {
             cell.configure(image: image)
             return cell
         case .ingredients:
-            let cell = tableView.dequeueReusableCell(withIdentifier: "IngredientCellIdentifier", for: indexPath)
-            cell.textLabel?.text = recipe?.ingredients?[indexPath.row]
+            let cell = tableView.dequeueReusableCell(withIdentifier: RecipeIngredientCell.identifier, for: indexPath) as! RecipeIngredientCell
+            cell.textLabel?.text = viewModel?.ingredient(at: indexPath.row)
             return cell
         case .details:
             let cell = tableView.dequeueReusableCell(withIdentifier: RecipeDetailCell.identifier, for: indexPath) as! RecipeDetailCell
-            if let recipe = recipe {
-                cell.configure(recipe: recipe, delegate: self)
+            if let viewModel = viewModel {
+                cell.configure(recipe: viewModel.recipe, delegate: self)
             }
             return cell
         }
     }
     
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        guard let section = Sections(rawValue: section) else {
-            return nil
-        }
-        
-        switch section {
-        case .image:
-            return nil
-        case .ingredients:
-            return "INGREDIENTS"
-        case .details:
-            return "INFO"
-        }
+        guard let section = Sections(rawValue: section) else { return nil }
+        return section.title
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        guard let section = Sections(rawValue: indexPath.section) else {
-            return 0
-        }
-        
-        switch section {
-        case .image:
-            return UIScreen.main.bounds.height / 2
-        case .ingredients:
-            return 44
-        case .details:
-            return 88
-        }
+        guard let section = Sections(rawValue: indexPath.section) else { return 0 }
+        return section.height
     }
 }
 
@@ -167,7 +137,8 @@ extension RecipeDetailViewController {
 extension RecipeDetailViewController: URLActionDelegate {
     func showUrl(url: URL?) {
         if let url = url {
-            performSegue(withIdentifier: "showWebView", sender: url)
+            let safari = SFSafariViewController(url: url)
+            present(safari, animated: true, completion: nil)
         }
     }
 }
