@@ -25,6 +25,14 @@ class RecipyApiTests: XCTestCase {
         super.tearDown()
     }
     
+    // Not used but nice
+    func waitUntil(asyncProcess: (_ done: @escaping () -> Void) -> Void) {
+        let myExpectation = expectation(description: "async call complete")
+        let done = { myExpectation.fulfill() }
+        asyncProcess(done)
+        waitForExpectations(timeout: 10)
+    }
+    
     func testSearchMakeRequest() {
         
         let completion = { (recipes: [Recipe]) in }
