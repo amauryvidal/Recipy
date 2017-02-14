@@ -139,7 +139,7 @@ extension RecipesListViewController {
         
         if offsetY > contentHeight - scrollView.frame.size.height,
             loadingMore == false,
-            viewModel.noMoreResults,
+            !viewModel.noMoreResults,
             let query = searchBar.text {
             
             loadingMore = true
