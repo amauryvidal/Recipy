@@ -8,11 +8,15 @@
 
 import Foundation
 
-class RecipesListViewModel {
+struct RecipesListViewModel {
+    private let apiClient = RecipeAPI.shared
+    private let recipes: [Recipe]
+    private let currentSearchPage: Int
     
-    private lazy var apiClient = RecipeAPI.shared
-    private var recipes = [Recipe]()
-    private var currentSearchPage = 1
+    init(recipes: [Recipe] = [Recipe](), page: Int = 1) {
+        self.recipes = recipes
+        self.currentSearchPage = page
+    }
     
     func recipe(at index: Int) -> Recipe? {
         return recipes[index]
@@ -20,10 +24,6 @@ class RecipesListViewModel {
     
     func recipes(matching query: String, completion: @escaping ([Recipe]) -> Void) {
         apiClient.recipe(matching: query, page: currentSearchPage, completion: completion)
-    }
-    
-    func add(recipes: [Recipe]) {
-        self.recipes += recipes
     }
     
     var nbRecipes: Int {
@@ -38,12 +38,17 @@ class RecipesListViewModel {
         return !(recipes.count > 0 && recipes.count % 30 == 0)
     }
     
-    func incrementPage() {
-        currentSearchPage += 1
+    func added(recipes: [Recipe]) -> RecipesListViewModel {
+        let recipesConcat = self.recipes + recipes
+        print(recipesConcat.count)
+        return RecipesListViewModel(recipes: recipesConcat, page: currentSearchPage)
     }
     
-    func reset() {
-        recipes.removeAll(keepingCapacity: false)
-        currentSearchPage = 1
+    func incrementedPage() -> RecipesListViewModel {
+        return RecipesListViewModel(recipes: recipes, page: currentSearchPage + 1)
+    }
+    
+    func reseted() -> RecipesListViewModel {
+        return RecipesListViewModel()
     }
 }

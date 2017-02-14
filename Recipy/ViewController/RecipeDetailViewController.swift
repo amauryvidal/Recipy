@@ -75,7 +75,8 @@ class RecipeDetailViewController: UITableViewController {
     
     // Fetch additionals detail about the recipe
     func fetchRecipeIngredients() {
-        viewModel?.details { (recipeDetails) in
+        viewModel?.details { (viewModelRecipeDetail) in
+            self.viewModel = viewModelRecipeDetail
             // Upate the view with the retrieved details
             DispatchQueue.main.async {
                 self.updateIngredients()

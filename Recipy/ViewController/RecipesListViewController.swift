@@ -87,7 +87,7 @@ class RecipesListViewController: UIViewController {
     func insertRecipes(recipes: [Recipe]) {
         if recipes.count > 0 {
             self.tableView.beginUpdates()
-            viewModel.add(recipes: recipes)
+            viewModel = viewModel.added(recipes: recipes)
             var indexPathsToInsert = [IndexPath]()
             let start = self.tableView.numberOfRows(inSection: 0)
             let end = start + recipes.count - 1
@@ -143,7 +143,7 @@ extension RecipesListViewController {
             let query = searchBar.text {
             
             loadingMore = true
-            viewModel.incrementPage()
+            viewModel = viewModel.incrementedPage()
             fetchRecipes(query: query)
         }
     }
@@ -156,7 +156,7 @@ extension RecipesListViewController: UISearchBarDelegate {
         if let query = searchBar.text, !query.isEmpty {
             
             // Clear previous results
-            viewModel.reset()
+            viewModel = viewModel.reseted()
             tableView.reloadData()
             view.endEditing(true)
             
